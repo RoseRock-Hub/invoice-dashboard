@@ -14,7 +14,6 @@
   ::-webkit-scrollbar-thumb { background: #c8cbd3; border-radius: 3px; }
   ::selection { background: #c2956a44; }
 
-  /* AUTH OVERLAY */
   #auth-overlay {
     position: fixed; inset: 0; background: #f8f9fb;
     display: flex; align-items: center; justify-content: center;
@@ -38,7 +37,6 @@
   #sign-in-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(194,149,106,0.35); }
   #auth-error { color: #991b1b; font-size: 12px; display: none; }
 
-  /* HEADER */
   header {
     padding: 20px 32px; border-bottom: 1px solid #e5e7eb;
     display: flex; align-items: center; justify-content: space-between;
@@ -70,7 +68,6 @@
   .refresh-btn:hover { background: #e5e7eb; color: #1a1d25; }
   .user-info { font-size: 11px; color: #8b8f9c; }
 
-  /* STATUS BAR */
   #status-bar {
     padding: 10px 32px; font-size: 13px; font-weight: 500;
     border-bottom: 1px solid #e5e7eb; display: none;
@@ -79,7 +76,6 @@
   #status-bar.error { display: block; background: #fef2f2; color: #991b1b; }
   #status-bar.loading { display: block; background: #f8f9fb; color: #5a5f6d; }
 
-  /* FILTER TABS */
   .toolbar {
     padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
     border-bottom: 1px solid #e5e7eb; background: #ffffff;
@@ -101,16 +97,9 @@
     padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
     border: none; cursor: pointer; font-family: inherit;
     background: linear-gradient(135deg, #c2956a, #a07848); color: #fff;
-    display: none;
   }
   .btn-create:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-secondary {
-    padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
-    border: 1px solid #e5e7eb; cursor: pointer; font-family: inherit;
-    background: #ffffff; color: #5a5f6d; display: none;
-  }
 
-  /* TABLE */
   .table-wrap { padding: 0 32px 80px; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; margin-top: 8px; }
   th {
@@ -119,9 +108,7 @@
     white-space: nowrap; background: #fafbfc;
   }
   th.right { text-align: right; }
-  td {
-    padding: 12px 12px; font-size: 13px; white-space: nowrap;
-  }
+  td { padding: 12px 12px; font-size: 13px; white-space: nowrap; }
   tr.data-row { border-bottom: 1px solid #f0f1f3; background: #ffffff; cursor: pointer; transition: background 0.1s; }
   tr.data-row:hover { background: #fafbfc; }
   tr.data-row.selected { background: #c2956a08; }
@@ -135,7 +122,6 @@
   .cell-invoice { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #2563eb; }
   .empty-row td { padding: 48px; text-align: center; color: #8b8f9c; font-size: 13px; font-style: italic; }
 
-  /* STATUS BADGE */
   .badge {
     display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px;
     font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase;
@@ -143,18 +129,14 @@
   .badge-ready { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
   .badge-invoiced { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
 
-  /* DROPDOWNS */
   .cell-select {
     background: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px;
     color: #1a1d25; padding: 4px 8px; font-size: 11px; font-family: inherit;
     cursor: pointer; max-width: 180px; width: 100%;
   }
   .cell-select.empty { color: #8b8f9c; }
-
-  /* CHECKBOX */
   input[type="checkbox"] { accent-color: #c2956a; cursor: pointer; }
 
-  /* SUMMARY BAR */
   .summary-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
     padding: 12px 32px; background: #ffffff; border-top: 1px solid #e5e7eb;
@@ -177,9 +159,8 @@
   <div id="auth-error"></div>
 </div>
 
-<!-- MAIN APP (hidden until authenticated) -->
+<!-- MAIN APP -->
 <div id="app" style="display:none; min-height:100vh;">
-  <!-- HEADER -->
   <header>
     <div class="header-left">
       <div class="header-logo">R</div>
@@ -195,25 +176,17 @@
       <div class="user-info" id="user-info"></div>
     </div>
   </header>
-
-  <!-- STATUS BAR -->
   <div id="status-bar"></div>
-
-  <!-- TOOLBAR -->
   <div class="toolbar">
     <div class="tabs" id="tabs"></div>
     <div class="actions" id="actions"></div>
   </div>
-
-  <!-- TABLE -->
   <div class="table-wrap">
     <table>
       <thead id="table-head"></thead>
       <tbody id="table-body"></tbody>
     </table>
   </div>
-
-  <!-- SUMMARY BAR -->
   <div class="summary-bar">
     <div id="summary-left"></div>
     <div id="summary-right"></div>
@@ -222,14 +195,14 @@
 
 <script>
 // ============================================================
-// CONFIG
+// CONFIG — Only columns R (Ready to Invoice) and S (Invoice Number)
 // ============================================================
 const CONFIG = {
   auth: {
     clientId: "67ec2435-f632-4446-9dd0-9e01a94f57dd",
     tenantId: "beecc5c3-e638-4d18-a389-94f85a2160e7",
     redirectUri: window.location.origin + window.location.pathname,
-    scopes: ["Files.Read.All", "Sites.Read.All"],
+    scopes: ["Files.ReadWrite.All", "Sites.ReadWrite.All"],
   },
   sharepoint: {
     siteId: "roserockenv.sharepoint.com,c2d64daf-8711-41ec-8df9-41ed42322216,1ea6c7b0-6a71-45b6-8cc4-d1c446eb92f2",
@@ -237,22 +210,19 @@ const CONFIG = {
     fileId: "01K75ZY52OJVHEWRLP3JG26L5DHRVOP3LK",
     worksheet: "OK 2026",
   },
-  columns: {
+  col: {
     jobNumber: 0,      // A
     client: 1,         // B
     siteAddress: 3,    // D
-    billingAddress: 4, // E
     jobDescription: 5, // F
     billAmount: 8,     // I
     dateCompleted: 9,  // J
     po: 10,            // K
-    readyToInvoice: 17,// R
-    invoiceNumber: 18, // S
+    readyToInvoice: 17,// R — "Yes" = show in dashboard
+    invoiceNumber: 18, // S — DocNumber written after invoice created
   },
-  webhooks: {
-    createInvoice: "https://hook.us2.make.com/jbbm85ucx8kcdgzamnuulnesrqsl92r5",
-  },
-  refreshIntervalMs: 5 * 60 * 1000,
+  webhookUrl: "https://hook.us2.make.com/2fdewegyuxruryntui1fef81gy154opj",
+  refreshMs: 5 * 60 * 1000,
   qboItems: [
     "Transportation & Disposal",
     "Disposal",
@@ -278,43 +248,30 @@ let selectedIds = new Set();
 let currentFilter = "Ready";
 let prevReadyIds = new Set();
 let refreshTimer = null;
-let jobProductService = {}; // jobId -> product/service selection
+let jobProductService = {};
 
 // ============================================================
-// MSAL AUTH
+// MSAL AUTH (redirect flow)
 // ============================================================
 function initMsal() {
-  const msalConfig = {
+  msalInstance = new msal.PublicClientApplication({
     auth: {
       clientId: CONFIG.auth.clientId,
       authority: `https://login.microsoftonline.com/${CONFIG.auth.tenantId}`,
       redirectUri: CONFIG.auth.redirectUri,
     },
-    cache: {
-      cacheLocation: "sessionStorage",
-      storeAuthStateInCookie: false,
-    },
-  };
-  msalInstance = new msal.PublicClientApplication(msalConfig);
+    cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: false },
+  });
 }
 
 async function signIn() {
   try {
     document.getElementById("auth-error").style.display = "none";
-    await msalInstance.loginRedirect({
-      scopes: CONFIG.auth.scopes,
-    });
-    // Page will redirect — no code runs after this
+    await msalInstance.loginRedirect({ scopes: CONFIG.auth.scopes });
   } catch (err) {
-    if (err.errorCode === "interaction_in_progress") {
-      sessionStorage.clear();
-      window.location.reload();
-      return;
-    }
     const el = document.getElementById("auth-error");
     el.textContent = "Sign-in failed: " + (err.message || err);
     el.style.display = "block";
-    console.error("Login error:", err);
   }
 }
 
@@ -323,17 +280,12 @@ async function getToken() {
   if (accounts.length === 0) throw new Error("No accounts found");
   try {
     const resp = await msalInstance.acquireTokenSilent({
-      scopes: CONFIG.auth.scopes,
-      account: accounts[0],
+      scopes: CONFIG.auth.scopes, account: accounts[0],
     });
     accessToken = resp.accessToken;
     return accessToken;
   } catch (err) {
-    // Silent failed, redirect to login
-    await msalInstance.acquireTokenRedirect({
-      scopes: CONFIG.auth.scopes,
-    });
-    // Page will redirect — no code runs after this
+    await msalInstance.acquireTokenRedirect({ scopes: CONFIG.auth.scopes });
   }
 }
 
@@ -342,10 +294,9 @@ function showApp(account) {
   document.getElementById("app").style.display = "block";
   document.getElementById("user-info").textContent = account.username;
   refreshData();
-  refreshTimer = setInterval(refreshData, CONFIG.refreshIntervalMs);
+  refreshTimer = setInterval(refreshData, CONFIG.refreshMs);
 }
 
-// Check if already logged in on page load
 async function checkExistingSession() {
   initMsal();
   try {
@@ -355,362 +306,281 @@ async function checkExistingSession() {
       showApp(resp.account);
       return;
     }
-  } catch (e) {}
-  
+  } catch (e) {
+    if (e.errorCode === "interaction_in_progress") {
+      sessionStorage.clear();
+      window.location.reload();
+      return;
+    }
+  }
   const accounts = msalInstance.getAllAccounts();
   if (accounts.length > 0) {
     try {
       await getToken();
       showApp(accounts[0]);
-    } catch (e) {
-      // Token expired, need to sign in again
-    }
+    } catch (e) {}
   }
 }
 
 // ============================================================
-// GRAPH API - READ SPREADSHEET
+// GRAPH API HELPERS
 // ============================================================
-async function fetchSpreadsheetData() {
-  await getToken();
+function wsUrl(path) {
   const { siteId, driveId, fileId, worksheet } = CONFIG.sharepoint;
-  
-  // Read usedRange to get all data
-  const url = `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/items/${fileId}/workbook/worksheets('${encodeURIComponent(worksheet)}')/usedRange?$select=values`;
-  
-  const resp = await fetch(url, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-  
-  if (!resp.ok) {
-    const errText = await resp.text();
-    throw new Error(`Graph API error ${resp.status}: ${errText}`);
-  }
-  
-  const data = await resp.json();
-  return data.values; // 2D array, row 0 = headers
+  return `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/items/${fileId}/workbook/worksheets('${encodeURIComponent(worksheet)}')/${path}`;
 }
 
+async function graphGet(url) {
+  await getToken();
+  const r = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!r.ok) throw new Error(`Graph GET ${r.status}: ${await r.text()}`);
+  return r.json();
+}
+
+async function graphPatch(url, body) {
+  await getToken();
+  const r = await fetch(url, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) throw new Error(`Graph PATCH ${r.status}: ${await r.text()}`);
+  return r.json();
+}
+
+// ============================================================
+// READ SPREADSHEET
+// ============================================================
 function parseJobs(rows) {
   if (!rows || rows.length < 2) return [];
-  const c = CONFIG.columns;
+  const c = CONFIG.col;
   const jobs = [];
-  
+
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
     if (!row || !row[c.jobNumber]) continue;
-    
-    const readyVal = row[c.readyToInvoice];
-    const invoiceNum = row[c.invoiceNumber];
-    
-    // Determine status
-    let status = "Not Ready";
-    if (readyVal && String(readyVal).toLowerCase() === "yes") {
-      if (invoiceNum && String(invoiceNum).trim() !== "") {
-        status = "Invoiced";
-      } else {
-        status = "Ready";
-      }
-    }
-    
-    // Only include jobs that are Ready or Invoiced
-    if (status === "Not Ready") continue;
-    
+
+    const readyVal = String(row[c.readyToInvoice] || "").trim().toLowerCase();
+    if (readyVal !== "yes") continue;
+
+    const invoiceNum = row[c.invoiceNumber] ? String(row[c.invoiceNumber]).trim() : "";
+    const status = invoiceNum ? "Invoiced" : "Ready";
+
     const billRaw = row[c.billAmount];
     const billAmount = typeof billRaw === "number" ? billRaw : parseFloat(String(billRaw).replace(/[,$]/g, "")) || 0;
-    
+
     let dateCompleted = row[c.dateCompleted];
     if (typeof dateCompleted === "number") {
-      // Excel serial date
-      const utcDays = Math.floor(dateCompleted - 25569);
-      dateCompleted = new Date(utcDays * 86400 * 1000);
+      dateCompleted = new Date(Math.floor(dateCompleted - 25569) * 86400 * 1000);
     }
-    
+
     jobs.push({
       id: `row-${i}`,
-      row: i + 1, // 1-indexed row in Excel
+      row: i + 1,
       jobNumber: String(row[c.jobNumber] || ""),
       client: String(row[c.client] || ""),
       siteAddress: String(row[c.siteAddress] || ""),
-      billingAddress: String(row[c.billingAddress] || ""),
       jobDescription: String(row[c.jobDescription] || ""),
-      billAmount: billAmount,
-      dateCompleted: dateCompleted,
+      billAmount,
+      dateCompleted,
       po: String(row[c.po] || ""),
-      status: status,
-      invoiceNumber: invoiceNum ? String(invoiceNum) : "",
+      status,
+      invoiceNumber: invoiceNum,
       productService: jobProductService[`row-${i}`] || "",
     });
   }
-  
   return jobs;
 }
 
 // ============================================================
-// DATA REFRESH
+// REFRESH
 // ============================================================
 async function refreshData() {
   showStatus("loading", "⟳ Reading spreadsheet...");
   try {
-    const rows = await fetchSpreadsheetData();
-    allJobs = parseJobs(rows);
-    
-    // Detect new ready jobs
+    const data = await graphGet(wsUrl("usedRange?$select=values"));
+    allJobs = parseJobs(data.values);
+
     const currentReadyIds = new Set(allJobs.filter(j => j.status === "Ready").map(j => j.id));
     let newCount = 0;
     if (prevReadyIds.size > 0) {
       currentReadyIds.forEach(id => { if (!prevReadyIds.has(id)) newCount++; });
     }
-    
     if (newCount > 0) {
-      const badge = document.getElementById("new-badge");
-      badge.textContent = `${newCount} new job${newCount > 1 ? "s" : ""} ready`;
-      badge.style.display = "inline-block";
+      document.getElementById("new-badge").textContent = `${newCount} new job${newCount > 1 ? "s" : ""} ready`;
+      document.getElementById("new-badge").style.display = "inline-block";
       document.title = `(${newCount}) New Jobs Ready — Rose Rock`;
-      playNotificationSound();
+      playSound();
     }
     prevReadyIds = currentReadyIds;
-    
+
     document.getElementById("last-update").textContent = `Updated ${new Date().toLocaleTimeString()}`;
-    selectedIds = new Set(); // Clear selections on refresh
-    renderTabs();
-    renderTable();
-    renderSummary();
+    selectedIds = new Set();
+    render();
     hideStatus();
   } catch (err) {
-    showStatus("error", "✗ Error: " + err.message);
+    showStatus("error", "✗ " + err.message);
     console.error("Refresh error:", err);
   }
 }
 
 // ============================================================
-// ACTIONS
+// CREATE INVOICES — send data to Make, get DocNumber, write to col S
 // ============================================================
 async function handleCreateInvoices() {
   const selected = allJobs.filter(j => selectedIds.has(j.id) && j.status === "Ready");
-  
-  // Validate all selected have product/service
+
   const missing = selected.filter(j => !j.productService);
   if (missing.length > 0) {
-    showStatus("error", `✗ ${missing.length} selected job(s) need a Product/Service before invoicing`);
+    showStatus("error", `✗ ${missing.length} job(s) need a Product/Service selected`);
     setTimeout(hideStatus, 5000);
     return;
   }
-  
-  showStatus("loading", `⟳ Creating invoices for ${selected.length} job(s)...`);
-  
-  try {
-    await getToken();
-    let successCount = 0;
-    let errors = [];
-    
-    for (const job of selected) {
-      try {
-        showStatus("loading", `⟳ Creating invoice ${successCount + 1} of ${selected.length}: ${job.jobNumber}...`);
-        
-        // Send job data to Make webhook and wait for response
-        const resp = await fetch(CONFIG.webhooks.createInvoice, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            jobNumber: job.jobNumber,
-            client: job.client,
-            siteAddress: job.siteAddress,
-            billingAddress: job.billingAddress || "",
-            jobDescription: job.jobDescription,
-            billAmount: job.billAmount,
-            dateCompleted: job.dateCompleted instanceof Date ? job.dateCompleted.toISOString().split('T')[0] : String(job.dateCompleted || ""),
-            po: job.po,
-            productService: job.productService,
-            excelRow: job.row,
-          }),
-        });
-        
-        const result = await resp.json();
-        
-        if (result.invoiceNumber) {
-          // Write invoice number to column S in spreadsheet
-          const { siteId, driveId, fileId, worksheet } = CONFIG.sharepoint;
-          const wsEncoded = encodeURIComponent(worksheet);
-          await graphPatch(
-            `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/items/${fileId}/workbook/worksheets('${wsEncoded}')/range(address='S${job.row}')`,
-            { values: [[String(result.invoiceNumber)]] }
-          );
-          successCount++;
-        } else {
-          errors.push(`${job.jobNumber}: ${result.error || "No invoice number returned"}`);
-        }
-      } catch (jobErr) {
-        errors.push(`${job.jobNumber}: ${jobErr.message}`);
-      }
-    }
-    
-    if (errors.length > 0) {
-      showStatus("error", `✗ ${errors.length} error(s): ${errors.join("; ")}`);
-    } else {
-      showStatus("success", `✓ ${successCount} invoice(s) created successfully!`);
-    }
-    
-    selectedIds = new Set();
-    
-    // Refresh after short delay to pick up updated statuses
-    setTimeout(refreshData, 3000);
-    setTimeout(hideStatus, 8000);
-  } catch (err) {
-    showStatus("error", "✗ Error creating invoices: " + err.message);
-    console.error("Create invoice error:", err);
-    setTimeout(hideStatus, 8000);
-  }
-}
 
-async function graphPatch(url, body) {
-  const resp = await fetch(url, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  if (!resp.ok) {
-    const errText = await resp.text();
-    throw new Error(`Graph PATCH failed: ${resp.status} ${errText}`);
+  let created = 0;
+  let errors = [];
+
+  for (let i = 0; i < selected.length; i++) {
+    const job = selected[i];
+    showStatus("loading", `⟳ Creating invoice ${i + 1} of ${selected.length}: ${job.jobNumber}...`);
+
+    let serviceDate = "";
+    if (job.dateCompleted instanceof Date && !isNaN(job.dateCompleted)) {
+      serviceDate = job.dateCompleted.toISOString().split("T")[0];
+    }
+
+    try {
+      const resp = await fetch(CONFIG.webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          client: job.client,
+          jobNumber: job.jobNumber,
+          description: job.jobDescription,
+          siteAddress: job.siteAddress,
+          billAmount: job.billAmount,
+          serviceDate: serviceDate,
+          productService: job.productService,
+          po: job.po,
+        }),
+      });
+
+      const result = await resp.json();
+
+      if (result.success && result.docNumber) {
+        // Write DocNumber to column S
+        await graphPatch(
+          wsUrl(`range(address='S${job.row}')`),
+          { values: [[result.docNumber]] }
+        );
+        job.invoiceNumber = result.docNumber;
+        job.status = "Invoiced";
+        created++;
+      } else {
+        errors.push(`${job.jobNumber}: ${result.error || "Unknown error"}`);
+      }
+    } catch (err) {
+      errors.push(`${job.jobNumber}: ${err.message}`);
+    }
   }
-  return resp.json();
+
+  selectedIds = new Set();
+
+  if (errors.length > 0) {
+    showStatus("error", `✗ ${created} created, ${errors.length} failed: ${errors.join("; ")}`);
+  } else {
+    showStatus("success", `✓ ${created} invoice(s) created successfully`);
+  }
+
+  render();
+  setTimeout(hideStatus, 8000);
 }
 
 // ============================================================
 // RENDERING
 // ============================================================
+function render() { renderTabs(); renderTable(); renderSummary(); }
+
+function getFiltered() {
+  if (currentFilter === "All") return allJobs;
+  return allJobs.filter(j => j.status === currentFilter);
+}
+
 function renderTabs() {
   const counts = {
     Ready: allJobs.filter(j => j.status === "Ready").length,
     Invoiced: allJobs.filter(j => j.status === "Invoiced").length,
     All: allJobs.length,
   };
-  
-  const tabsEl = document.getElementById("tabs");
-  tabsEl.innerHTML = ["Ready", "Invoiced", "All"].map(f =>
+  document.getElementById("tabs").innerHTML = ["Ready", "Invoiced", "All"].map(f =>
     `<button class="tab-btn ${currentFilter === f ? 'active' : ''}" onclick="switchTab('${f}')">
       ${f}<span class="tab-count">${counts[f]}</span>
     </button>`
   ).join("");
-  
-  renderActions();
-}
 
-function switchTab(tab) {
-  currentFilter = tab;
-  selectedIds = new Set();
-  // Reset title
-  document.title = "Rose Rock — Invoice Dashboard";
-  document.getElementById("new-badge").style.display = "none";
-  renderTabs();
-  renderTable();
-  renderSummary();
-}
-
-function renderActions() {
-  const actionsEl = document.getElementById("actions");
   let html = "";
-  
   if (currentFilter === "Ready" && selectedIds.size > 0) {
-    html += `<button class="btn-create" style="display:inline-block" onclick="handleCreateInvoices()">
-      Create Invoices (${selectedIds.size})
-    </button>`;
+    html = `<button class="btn-create" onclick="handleCreateInvoices()">Create Invoices (${selectedIds.size})</button>`;
   }
-  
-  actionsEl.innerHTML = html;
-}
-
-function getFilteredJobs() {
-  if (currentFilter === "All") return allJobs;
-  return allJobs.filter(j => j.status === currentFilter);
+  document.getElementById("actions").innerHTML = html;
 }
 
 function renderTable() {
-  const filtered = getFilteredJobs();
-  
-  // HEADER
-  let headHtml = `<tr style="border-bottom:1px solid #e5e7eb">
+  const filtered = getFiltered();
+
+  let head = `<tr style="border-bottom:1px solid #e5e7eb">
     <th style="width:40px"><input type="checkbox" onchange="toggleSelectAll()" ${selectedIds.size === filtered.length && filtered.length > 0 ? 'checked' : ''}></th>
-    <th>Job #</th>
-    <th>Client</th>
-    <th>Site Address</th>
-    <th>Description</th>
-    <th class="right">Amount</th>
-    <th>Completed</th>
-    <th>PO#</th>
-    <th>Status</th>`;
-  
-  if (currentFilter === "Invoiced" || currentFilter === "All") {
-    headHtml += `<th>Invoice #</th>`;
-  }
-  if (currentFilter === "Ready") {
-    headHtml += `<th>Product/Service</th>`;
-  }
-  headHtml += `</tr>`;
-  document.getElementById("table-head").innerHTML = headHtml;
-  
-  // BODY
+    <th>Job #</th><th>Client</th><th>Site Address</th><th>Description</th>
+    <th class="right">Amount</th><th>Completed</th><th>PO#</th><th>Status</th>`;
+  if (currentFilter !== "Ready") head += `<th>Invoice #</th>`;
+  if (currentFilter === "Ready") head += `<th>Product/Service</th>`;
+  head += `</tr>`;
+  document.getElementById("table-head").innerHTML = head;
+
   if (filtered.length === 0) {
     document.getElementById("table-body").innerHTML = `<tr class="empty-row"><td colspan="10">No ${currentFilter.toLowerCase()} jobs</td></tr>`;
     return;
   }
-  
-  let bodyHtml = "";
+
+  let body = "";
   for (const job of filtered) {
     const sel = selectedIds.has(job.id);
-    const badgeClass = {
-      "Ready": "badge-ready",
-      "Invoiced": "badge-invoiced",
-    }[job.status] || "";
-    
-    bodyHtml += `<tr class="data-row ${sel ? 'selected' : ''}" onclick="toggleSelect('${job.id}')">
+    const bc = job.status === "Ready" ? "badge-ready" : "badge-invoiced";
+    const ps = job.productService || "";
+
+    body += `<tr class="data-row ${sel ? 'selected' : ''}" onclick="toggleSelect('${job.id}')">
       <td style="width:40px"><input type="checkbox" ${sel ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelect('${job.id}')"></td>
       <td class="cell-job">${esc(job.jobNumber)}</td>
       <td class="cell-client">${esc(job.client)}</td>
       <td class="cell-address" title="${esc(job.siteAddress)}">${esc(job.siteAddress)}</td>
       <td class="cell-desc" title="${esc(job.jobDescription)}">${esc(job.jobDescription)}</td>
-      <td class="cell-amount">${formatCurrency(job.billAmount)}</td>
-      <td class="cell-date">${formatDate(job.dateCompleted)}</td>
+      <td class="cell-amount">${fmtCur(job.billAmount)}</td>
+      <td class="cell-date">${fmtDate(job.dateCompleted)}</td>
       <td class="cell-po">${esc(job.po) || "—"}</td>
-      <td><span class="badge ${badgeClass}">${esc(job.status)}</span></td>`;
-    
-    if (currentFilter === "Invoiced" || currentFilter === "All") {
-      bodyHtml += `<td class="cell-invoice">${esc(job.invoiceNumber) || "—"}</td>`;
+      <td><span class="badge ${bc}">${esc(job.status)}</span></td>`;
+
+    if (currentFilter !== "Ready") {
+      body += `<td class="cell-invoice">${esc(job.invoiceNumber) || "—"}</td>`;
     }
-    
     if (currentFilter === "Ready") {
-      const psVal = job.productService || "";
-      bodyHtml += `<td>
-        <select class="cell-select ${psVal ? '' : 'empty'}" 
-          onclick="event.stopPropagation()" 
-          onchange="setProductService('${job.id}', this.value)">
-          <option value="">Select...</option>
-          ${CONFIG.qboItems.map(item => `<option value="${esc(item)}" ${psVal === item ? 'selected' : ''}>${esc(item)}</option>`).join("")}
-        </select>
-      </td>`;
+      body += `<td><select class="cell-select ${ps ? '' : 'empty'}" onclick="event.stopPropagation()" onchange="setPS('${job.id}', this.value)">
+        <option value="">Select...</option>
+        ${CONFIG.qboItems.map(item => `<option value="${esc(item)}" ${ps === item ? 'selected' : ''}>${esc(item)}</option>`).join("")}
+      </select></td>`;
     }
-    
-    bodyHtml += `</tr>`;
+    body += `</tr>`;
   }
-  
-  document.getElementById("table-body").innerHTML = bodyHtml;
+  document.getElementById("table-body").innerHTML = body;
 }
 
 function renderSummary() {
-  const filtered = getFilteredJobs();
+  const filtered = getFiltered();
   const total = filtered.reduce((s, j) => s + (j.billAmount || 0), 0);
-  
-  let leftHtml = `${filtered.length} job${filtered.length !== 1 ? "s" : ""} shown`;
-  if (selectedIds.size > 0) {
-    leftHtml += ` · <span class="sel-count">${selectedIds.size} selected</span>`;
-  }
-  document.getElementById("summary-left").innerHTML = leftHtml;
-  
+  let left = `${filtered.length} job${filtered.length !== 1 ? "s" : ""} shown`;
+  if (selectedIds.size > 0) left += ` · <span class="sel-count">${selectedIds.size} selected</span>`;
+  document.getElementById("summary-left").innerHTML = left;
   document.getElementById("summary-right").innerHTML =
-    `Total: <span class="total">${formatCurrency(total)}</span>` +
+    `Total: <span class="total">${fmtCur(total)}</span>` +
     ` <span style="color:#e5e7eb;margin:0 8px">|</span> ` +
     `Auto-refresh: <span class="auto-refresh">ON</span> (5 min)`;
 }
@@ -719,29 +589,25 @@ function renderSummary() {
 // INTERACTIONS
 // ============================================================
 function toggleSelect(id) {
-  if (selectedIds.has(id)) {
-    selectedIds.delete(id);
-  } else {
-    selectedIds.add(id);
-  }
-  renderTable();
-  renderActions();
-  renderSummary();
+  selectedIds.has(id) ? selectedIds.delete(id) : selectedIds.add(id);
+  render();
 }
 
 function toggleSelectAll() {
-  const filtered = getFilteredJobs();
-  if (selectedIds.size === filtered.length) {
-    selectedIds = new Set();
-  } else {
-    selectedIds = new Set(filtered.map(j => j.id));
-  }
-  renderTable();
-  renderActions();
-  renderSummary();
+  const filtered = getFiltered();
+  selectedIds = selectedIds.size === filtered.length ? new Set() : new Set(filtered.map(j => j.id));
+  render();
 }
 
-function setProductService(jobId, value) {
+function switchTab(tab) {
+  currentFilter = tab;
+  selectedIds = new Set();
+  document.title = "Rose Rock — Invoice Dashboard";
+  document.getElementById("new-badge").style.display = "none";
+  render();
+}
+
+function setPS(jobId, value) {
   jobProductService[jobId] = value;
   const job = allJobs.find(j => j.id === jobId);
   if (job) job.productService = value;
@@ -750,14 +616,13 @@ function setProductService(jobId, value) {
 // ============================================================
 // UTILITIES
 // ============================================================
-function formatCurrency(v) {
+function fmtCur(v) {
   if (v == null || v === "") return "—";
   const n = typeof v === "number" ? v : parseFloat(v);
-  if (isNaN(n)) return "—";
-  return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return isNaN(n) ? "—" : "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function formatDate(d) {
+function fmtDate(d) {
   if (!d) return "—";
   if (d instanceof Date && !isNaN(d)) return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   return String(d);
@@ -765,9 +630,9 @@ function formatDate(d) {
 
 function esc(s) {
   if (!s) return "";
-  const div = document.createElement("div");
-  div.textContent = String(s);
-  return div.innerHTML;
+  const d = document.createElement("div");
+  d.textContent = String(s);
+  return d.innerHTML;
 }
 
 function showStatus(type, msg) {
@@ -782,7 +647,7 @@ function hideStatus() {
   el.style.display = "none";
 }
 
-function playNotificationSound() {
+function playSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
@@ -801,8 +666,6 @@ function playNotificationSound() {
 // INIT
 // ============================================================
 window.addEventListener("DOMContentLoaded", checkExistingSession);
-
-// Reset title on focus
 window.addEventListener("focus", () => {
   document.title = "Rose Rock — Invoice Dashboard";
   document.getElementById("new-badge").style.display = "none";
